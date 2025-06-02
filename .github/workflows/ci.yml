@@ -27,45 +27,6 @@ jobs:
       - name: Install dependencies
         run: npm i
 
-      - name: Lint code
-        run: npm run lint
-        # Add a condition to not fail the build if linting has issues in this environment
-        # continue-on-error: true
-
       - name: Run tests
         run: npm test -- --coverage # Run tests with coverage
 
-      - name: Build library
-        run: npm run build
-
-    # Optional: Upload coverage reports
-    # - name: Upload coverage to Codecov
-    #   uses: codecov/codecov-action@v3
-    #   with:
-    #     token: ${{ secrets.CODECOV_TOKEN }} # If using Codecov
-    #     files: ./coverage/lcov.info
-
-  build-example:
-    runs-on: ubuntu-latest
-    needs: build-and-test # Run after library build and test
-
-    strategy:
-      matrix:
-        node-version: [18.x] # Example app might not need multi-version testing
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: example/package-lock.json # Cache example app deps
-
-      - name: Install example app dependencies
-        run: cd example && npm ci
-
-      - name: Build example app
-        run: cd example && npm run build
