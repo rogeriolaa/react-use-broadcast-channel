@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-test:
@@ -15,28 +15,28 @@ jobs:
         node-version: [18.x, 20.x] # Test on common LTS versions
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm' # Enable caching for npm dependencies
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm' # Enable caching for npm dependencies
 
-    - name: Install dependencies
-      run: npm ci # Use ci for cleaner installs in CI
+      - name: Install dependencies
+        run: npm i
 
-    - name: Lint code
-      run: npm run lint 
-      # Add a condition to not fail the build if linting has issues in this environment
-      # continue-on-error: true 
+      - name: Lint code
+        run: npm run lint
+        # Add a condition to not fail the build if linting has issues in this environment
+        # continue-on-error: true
 
-    - name: Run tests
-      run: npm test -- --coverage # Run tests with coverage
+      - name: Run tests
+        run: npm test -- --coverage # Run tests with coverage
 
-    - name: Build library
-      run: npm run build
+      - name: Build library
+        run: npm run build
 
     # Optional: Upload coverage reports
     # - name: Upload coverage to Codecov
@@ -54,18 +54,18 @@ jobs:
         node-version: [18.x] # Example app might not need multi-version testing
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: example/package-lock.json # Cache example app deps
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: example/package-lock.json # Cache example app deps
 
-    - name: Install example app dependencies
-      run: cd example && npm ci
+      - name: Install example app dependencies
+        run: cd example && npm ci
 
-    - name: Build example app
-      run: cd example && npm run build
+      - name: Build example app
+        run: cd example && npm run build
