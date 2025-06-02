@@ -1,0 +1,62 @@
+{
+  "name": "@n0n3br/react-use-broadcast-channel",
+  "version": "1.0.0",
+  "author": "rogeriolaa",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rogeriolaa/react-use-broadcast-channel.git"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --external react --clean",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint src __tests__ --ext .ts,.tsx --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "example:dev": "cd example && npm run dev",
+    "example:build": "cd example && npm run build",
+    "example:preview": "cd example && npm run preview"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^15.0.7",
+    "@types/jest": "^29.5.14",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.12.0",
+    "eslint-plugin-prettier": "^5.4.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "jest": "^29.7.0",
+    "prettier": "^3.5.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "ts-jest": "^29.3.4",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "broadcastchannel",
+    "cross-tab",
+    "state-management",
+    "typescript"
+  ],
+  "homepage": "https://github.com/rogeriolaa/react-use-broadcast-channel#readme",
+  "bugs": {
+    "url": "https://github.com/rogeriolaa/react-use-broadcast-channel/issues"
+  }
+}

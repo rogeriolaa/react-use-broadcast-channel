@@ -1,0 +1,17 @@
+node_modules
+dist
+coverage
+example/dist
+example/coverage
+build
+public
+.vite
+.cache
+.DS_Store
+*.log
+# Specific files if needed
+# package-lock.json (some prefer not to format it)
+# yarn.lock
+# pnpm-lock.yaml
+# Example files if they have specific formatting or are auto-generated
+# example/public/*
