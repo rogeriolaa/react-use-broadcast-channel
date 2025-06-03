@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // Assuming the hook is in ../../src relative to example/src/App.tsx
 import useBroadcastChannel from '../../src/useBroadcastChannel';
 
