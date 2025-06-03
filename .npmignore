@@ -1,0 +1,40 @@
+# Source code (covered by 'files' in package.json, but explicit)
+/src
+/__tests__
+/example
+/coverage
+
+# Configuration files not needed in the package
+*.tsbuildinfo
+tsconfig.json
+jest.config.ts
+tsup.config.ts
+babel.config.js
+.eslint*
+.prettier*
+postcss.config.js
+tailwind.config.js
+jest.setup.ts
+
+# Dot files
+.git
+.github
+.vscode
+.idea
+.gitignore
+
+# Logs and temp files
+*.log
+.DS_Store
+
+# Node modules (never include)
+/node_modules
+
+# Ensure README and LICENSE are included (even if other .md are ignored)
+!README.md
+!LICENSE
+
+# package.json and package-lock.json are included by default,
+# but other lockfiles should be ignored if they exist.
+yarn.lock
+pnpm-lock.yaml
