@@ -1,7 +1,7 @@
 {
   "name": "@n0n3br/react-use-broadcast-channel",
   "version": "1.0.0",
-  "author": "rogeriolaa",
+  "author": "Rogerio Amorim <rogeriol@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -57,7 +57,7 @@
     "state-management",
     "typescript"
   ],
-  "homepage": "https://github.com/rogeriolaa/react-use-broadcast-channel#readme",
+  "homepage": "https://rogeriolaa.github.io/react-use-broadcast-channel/",
   "bugs": {
     "url": "https://github.com/rogeriolaa/react-use-broadcast-channel/issues"
   }
