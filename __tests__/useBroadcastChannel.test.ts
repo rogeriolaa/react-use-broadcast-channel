@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import useBroadcastChannel from '../src/useBroadcastChannel';
 
 // Mock BroadcastChannel
@@ -59,13 +59,13 @@ describe('useBroadcastChannel', () => {
     mockOnMessage = null;
     mockOnMessageError = null;
     broadcastChannelInstances = [];
-    global.BroadcastChannel = mockBroadcastChannel;
+    globalThis.BroadcastChannel = mockBroadcastChannel;
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
     // @ts-ignore
-    delete global.BroadcastChannel; // Clean up to ensure it doesn't leak between tests
+    delete globalThis.BroadcastChannel; // Clean up to ensure it doesn't leak between tests
   });
 
   describe('Initial State', () => {
@@ -130,17 +130,30 @@ describe('useBroadcastChannel', () => {
 
     it('should set error if postMessage fails', () => {
       const errorMessage = 'Failed to post';
+      const { result } = renderHook(() => useBroadcastChannel(CHANNEL_NAME, INITIAL_VALUE));
+      // Set up the mock to throw on the next call
       mockPostMessage.mockImplementationOnce(() => {
         throw new Error(errorMessage);
       });
-      const { result } = renderHook(() => useBroadcastChannel(CHANNEL_NAME, INITIAL_VALUE));
       const newMessage = { data: 'test' };
-
       act(() => {
         result.current[1](newMessage);
       });
-
       expect(result.current[2].error).toEqual(new Error(`Error sending message: ${errorMessage}`));
+    });
+
+    it('should set error if postMessage is called after channel is closed', () => {
+      const { result } = renderHook(() => useBroadcastChannel(CHANNEL_NAME, INITIAL_VALUE));
+      act(() => {
+        result.current[2].close();
+      });
+      const newMessage = { data: 'should-fail' };
+      act(() => {
+        result.current[1](newMessage);
+      });
+      expect(result.current[2].error).toEqual(
+        new Error('BroadcastChannel is not initialized or closed.')
+      );
     });
   });
 
@@ -276,7 +289,7 @@ describe('useBroadcastChannel', () => {
     it('should set error if BroadcastChannel constructor throws', () => {
       const constructorError = 'Constructor failed';
       // @ts-ignore
-      global.BroadcastChannel = jest.fn().mockImplementation(() => {
+      globalThis.BroadcastChannel = jest.fn().mockImplementation(() => {
         throw new Error(constructorError);
       });
       const { result } = renderHook(() => useBroadcastChannel(CHANNEL_NAME, INITIAL_VALUE));
@@ -292,6 +305,31 @@ describe('useBroadcastChannel', () => {
       simulateMessageError(errorData);
 
       expect(result.current[2].error).toEqual(new Error(`Message error: ${errorData}`));
+    });
+
+    it('should close and null channelRef if constructor throws after channel is created', () => {
+      // Simulate a constructor that creates a channel, then throws
+      let constructed = false;
+      globalThis.BroadcastChannel = jest.fn().mockImplementation(() => {
+        if (!constructed) {
+          constructed = true;
+          // Return a mock with close method for the first call
+          return { close: mockClose };
+        }
+        throw new Error('Constructor failed after creation');
+      });
+      // Patch the serializer to throw after the channel is created
+      const serializer = () => {
+        throw new Error('Constructor failed after creation');
+      };
+      const { result } = renderHook(() =>
+        useBroadcastChannel(CHANNEL_NAME, INITIAL_VALUE, { serializer })
+      );
+      // The error should be set, and close should have been called
+      expect(result.current[2].error).toEqual(
+        new Error('Error creating BroadcastChannel: Constructor failed after creation')
+      );
+      expect(mockClose).toHaveBeenCalled();
     });
   });
 });
